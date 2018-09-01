@@ -1,6 +1,7 @@
 import React from "react";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import web3 from '../../etherium/web3';
 import factory from '../../etherium/factory';
@@ -24,25 +25,26 @@ export default class Create extends React.Component {
 
   create = async (event) => {
     event.preventDefault();
+    this.setState({loading: true});
+    try {
+        const accounts = await web3.eth.getAccounts();
+        console.log('--->', factory.methods);
+        await factory.methods
+          .addItem(this.state.partName, this.state.price, this.state.lifeSpan)
+          .send({
+            from: accounts[0]
+          });
+        console.log('Created Now');
+      } catch (err) {
+        this.setState({ errorMessage: err.message });
+    }
 
-    this.setState({   loading: true, 
-                      errorMessage: '', 
-                      partName: '', 
-                      price: '',
-                      lifeSpan: '' });
-
-    // try {
-    //     const accounts = await web3.eth.getAccounts();
-    //     await factory.methods
-    //       .create(this.state.partName, this.state.price, this.state.lifeSpan)
-    //       .send({
-    //         from: accounts[0]
-    //       });
-    //   } catch (err) {
-    //     this.setState({ errorMessage: err.message });
-    // }
-    // console.log('Contract Created');
-    // this.setState({ loading: false });
+    console.log('Contract Created');
+    this.setState({   loading: false, 
+      errorMessage: '', 
+      partName: '', 
+      price: '',
+      lifeSpan: '' });
   };
 
 render() {
@@ -50,7 +52,7 @@ render() {
 <div className="stuff-container">
         <div className="card">
           <div className="header-block">
-            <h3>Initiate New Contract</h3>
+            <h3>Add new Item</h3>
           </div>
           <div className="first-inputs">
               <div className="input-group">
@@ -88,13 +90,23 @@ render() {
           </div>
           <div className="first-inputs">
             <div className="input-group">
-              <Button 
-                variant="contained" 
-                color="primary"
-                onClick={this.create}
-              >
-                Create
-              </Button>
+
+
+            {
+              this.state.loading ? (
+                <CircularProgress className="" />
+              ) : (
+                <Button 
+                  variant="contained" 
+                  color="primary"
+                  onClick={this.create}
+                >
+                  Create
+                </Button>
+              )
+            }
+
+
             </div>
           </div>
         </div>
