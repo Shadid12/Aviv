@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import Create from './components/Create';
+import ItemList from './components/ItemList';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -45,7 +46,7 @@ export default class App extends React.Component {
               </Toolbar>
             </AppBar>
             <Route path="/new" component={Create} />
-            {/* <Create /> */}
+            <Route path="/" component={ItemList} />
           </div>
         </Router>
       </div>
