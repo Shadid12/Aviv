@@ -2,12 +2,50 @@ import React from "react";
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
+import web3 from '../../etherium/web3';
+import factory from '../../etherium/factory';
 
 // css
 import '../styles/card.sass';
 
 export default class Create extends React.Component {
-    render() {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      partName: '',
+      price: '',
+      lifeSpan: '',
+      loading: false,
+      errorMessage: ''
+    }
+  }
+
+
+  create = async (event) => {
+    event.preventDefault();
+
+    this.setState({   loading: true, 
+                      errorMessage: '', 
+                      partName: '', 
+                      price: '',
+                      lifeSpan: '' });
+
+    // try {
+    //     const accounts = await web3.eth.getAccounts();
+    //     await factory.methods
+    //       .create(this.state.partName, this.state.price, this.state.lifeSpan)
+    //       .send({
+    //         from: accounts[0]
+    //       });
+    //   } catch (err) {
+    //     this.setState({ errorMessage: err.message });
+    // }
+    // console.log('Contract Created');
+    // this.setState({ loading: false });
+  };
+
+render() {
         return(
 <div className="stuff-container">
         <div className="card">
@@ -20,13 +58,9 @@ export default class Create extends React.Component {
                   label="Part Name"
                   placeholder="Name"
                   margin="normal"
-                />
-              </div>
-              <div className="input-group">
-                <TextField
-                  label="SKU"
-                  placeholder="SKU"
-                  margin="normal"
+                  value={this.state.partName}
+                  onChange={event =>
+                    this.setState({ partName: event.target.value })}
                 />
               </div>
               <div className="input-group">
@@ -35,40 +69,20 @@ export default class Create extends React.Component {
                   label="Price ($)"
                   placeholder="Price"
                   margin="normal"
-                />
-              </div>
-          </div>
-          <div className="first-inputs">
-              <div className="input-group">
-                <TextField
-                  label="Buyer ID"
-                  placeholder="Buyer ID"
-                  margin="normal"
-                />
-              </div>
-              <div className="input-group">
-                <TextField
-                  label="Seller ID"
-                  placeholder="Seller ID"
-                  margin="normal"
+                  value={this.state.price}
+                  onChange={event =>
+                    this.setState({ price: event.target.value })}
                 />
               </div>
               <div className="input-group">
                 <TextField
                   type="number"
-                  label="Service Hours"
-                  placeholder="Service Hours"
+                  label="Life Span (Hours)"
+                  placeholder="Life Span (Hours)"
                   margin="normal"
-                />
-              </div>
-          </div>
-          <div className="first-inputs">
-            <div className="input-group">
-                <TextField
-                  label="# of Services"
-                  type="number"
-                  placeholder="# of Services"
-                  margin="normal"
+                  value={this.state.lifeSpan}
+                  onChange={event =>
+                    this.setState({ lifeSpan: event.target.value })}
                 />
               </div>
           </div>
@@ -76,7 +90,8 @@ export default class Create extends React.Component {
             <div className="input-group">
               <Button 
                 variant="contained" 
-                color="primary" 
+                color="primary"
+                onClick={this.create}
               >
                 Create
               </Button>
